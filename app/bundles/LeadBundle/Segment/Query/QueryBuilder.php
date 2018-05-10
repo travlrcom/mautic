@@ -1528,6 +1528,11 @@ class QueryBuilder
     public function guessPrimaryLeadContactIdColumn()
     {
         $parts     = $this->getQueryParts();
+
+        if (isset($parts['from'][0]['alias']) && $parts['from'][0]['alias'] == 'orp') {
+            return 'orp.lead_id';
+        }
+
         $leadTable = $parts['from'][0]['alias'];
         if (!isset($parts['join'][$leadTable])) {
             return $leadTable.'.id';
