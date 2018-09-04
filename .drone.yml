@@ -1,0 +1,15 @@
+pipeline:
+
+  push-mautic-image:
+    image: plugins/ecr
+    group: build
+    registry: 269461048441.dkr.ecr.ap-southeast-2.amazonaws.com
+    repo: mautic
+    secrets: [ ecr_access_key, ecr_secret_key ]
+    tags: v${DRONE_TAG}
+    dockerfile: Dockerfile
+    context: mautic
+    region: ap-southeast-2
+    when:
+      event: [ tag ]
+      branch: [ travlr ]
