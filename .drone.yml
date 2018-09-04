@@ -8,7 +8,6 @@ pipeline:
     secrets: [ ecr_access_key, ecr_secret_key ]
     tags: v${DRONE_TAG}
     dockerfile: Dockerfile
-    context: mautic
     region: ap-southeast-2
     when:
       event: [ tag ]
