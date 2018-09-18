@@ -1892,30 +1892,31 @@ class EmailModel extends FormModel implements AjaxLookupModelInterface
             $chart->setDataset($this->translator->trans('mautic.email.failed.emails'), $data);
         }
 
-        if ($flag == 'all' || $flag == 'clicked' || in_array('clicked', $datasets)) {
-            $q = $query->prepareTimeDataQuery('page_hits', 'date_hit', []);
-            $q->leftJoin('t', MAUTIC_TABLE_PREFIX.'email_stats', 'es', 't.source_id = es.email_id AND t.source = "email"');
+        // FIXME: This block does not scale well when there are heaps of clicks. Locks up the database for ages.
+        // if ($flag == 'all' || $flag == 'clicked' || in_array('clicked', $datasets)) {
+        //     $q = $query->prepareTimeDataQuery('page_hits', 'date_hit', []);
+        //     $q->leftJoin('t', MAUTIC_TABLE_PREFIX.'email_stats', 'es', 't.source_id = es.email_id AND t.source = "email"');
 
-            if (isset($filter['email_id'])) {
-                if (is_array($filter['email_id'])) {
-                    $q->andWhere('t.source_id IN (:email_ids)');
-                    $q->setParameter('email_ids', $filter['email_id'], \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
-                } else {
-                    $q->andWhere('t.source_id = :email_id');
-                    $q->setParameter('email_id', $filter['email_id']);
-                }
-            }
+        //     if (isset($filter['email_id'])) {
+        //         if (is_array($filter['email_id'])) {
+        //             $q->andWhere('t.source_id IN (:email_ids)');
+        //             $q->setParameter('email_ids', $filter['email_id'], \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+        //         } else {
+        //             $q->andWhere('t.source_id = :email_id');
+        //             $q->setParameter('email_id', $filter['email_id']);
+        //         }
+        //     }
 
-            if (!$canViewOthers) {
-                $this->limitQueryToCreator($q);
-            }
-            $this->addCompanyFilter($q, $companyId);
-            $this->addCampaignFilter($q, $campaignId);
-            $this->addSegmentFilter($q, $segmentId, 'es');
-            $data = $query->loadAndBuildTimeData($q);
+        //     if (!$canViewOthers) {
+        //         $this->limitQueryToCreator($q);
+        //     }
+        //     $this->addCompanyFilter($q, $companyId);
+        //     $this->addCampaignFilter($q, $campaignId);
+        //     $this->addSegmentFilter($q, $segmentId, 'es');
+        //     $data = $query->loadAndBuildTimeData($q);
 
-            $chart->setDataset($this->translator->trans('mautic.email.clicked'), $data);
-        }
+        //     $chart->setDataset($this->translator->trans('mautic.email.clicked'), $data);
+        // }
 
         if ($flag == 'all' || $flag == 'unsubscribed' || in_array('unsubscribed', $datasets)) {
             $data = $this->getDncLineChartDataset($query, $filter, DoNotContact::UNSUBSCRIBED, $canViewOthers, $companyId, $campaignId, $segmentId);
