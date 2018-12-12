@@ -18,7 +18,9 @@ pipeline:
   update-cronjob-mautic-campaigns-build:
     image: travlrdev/k8s-jobs-updater
     namespace: production
+    group: update-cronjob
     job: cronjob-mautic-campaigns-build
+    container: [ cronjob-mautic-campaigns-build ]
     repo: 269461048441.dkr.ecr.ap-southeast-2.amazonaws.com/mautic
     tag: v${DRONE_TAG}
     kubernetes_server: ${KUBERNETES_SERVER}
@@ -34,7 +36,9 @@ pipeline:
   update-cronjob-mautic-emails-broadcast:
     image: travlrdev/k8s-jobs-updater
     namespace: production
+    group: update-cronjob
     job: cronjob-mautic-emails-broadcast
+    container: [ cronjob-mautic-emails-broadcast ]
     repo: 269461048441.dkr.ecr.ap-southeast-2.amazonaws.com/mautic
     tag: v${DRONE_TAG}
     kubernetes_server: ${KUBERNETES_SERVER}
@@ -50,7 +54,9 @@ pipeline:
   update-cronjob-mautic-emails-send:
     image: travlrdev/k8s-jobs-updater
     namespace: production
+    group: update-cronjob
     job: cronjob-mautic-emails-send
+    container: [ cronjob-mautic-emails-send ]
     repo: 269461048441.dkr.ecr.ap-southeast-2.amazonaws.com/mautic
     tag: v${DRONE_TAG}
     kubernetes_server: ${KUBERNETES_SERVER}
@@ -66,8 +72,10 @@ pipeline:
   update-cronjob-mautic-import:
     image: travlrdev/k8s-jobs-updater
     namespace: production
+    group: update-cronjob
     job: cronjob-mautic-import
     repo: 269461048441.dkr.ecr.ap-southeast-2.amazonaws.com/mautic
+    container: [ cronjob-mautic-import, cronjob-mautic-reports-scheduler ]
     tag: v${DRONE_TAG}
     kubernetes_server: ${KUBERNETES_SERVER}
     kubernetes_cert: ${KUBERNETES_CERT}
@@ -82,7 +90,9 @@ pipeline:
   update-cronjob-mautic-misc:
     image: travlrdev/k8s-jobs-updater
     namespace: production
+    group: update-cronjob
     job: cronjob-mautic-misc
+    container: [ cronjob-mautic-email-fetch, cronjob-mautic-social-monitoring, cronjob-mautic-webhooks-process ]
     repo: 269461048441.dkr.ecr.ap-southeast-2.amazonaws.com/mautic
     tag: v${DRONE_TAG}
     kubernetes_server: ${KUBERNETES_SERVER}
